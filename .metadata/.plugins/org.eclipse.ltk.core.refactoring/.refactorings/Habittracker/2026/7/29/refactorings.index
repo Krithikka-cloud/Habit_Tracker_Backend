@@ -1,0 +1,11 @@
+1783917449112	Rename package 'com.habittracker.Habittracker.serviceimpl'
+1783920310266	Copy package
+1783920323225	Delete element
+1783930255097	Rename package 'config'
+1783930282453	Rename package 'controller'
+1783930298841	Rename package 'DTO'
+1783930319235	Rename package 'entity'
+1783930376971	Rename package 'repository'
+1783930400963	Rename package 'service'
+1783930462821	Rename package 'serviceimpl'
+1784125226520	Rename compilation unit 'wtAuthenticationFilter.java'

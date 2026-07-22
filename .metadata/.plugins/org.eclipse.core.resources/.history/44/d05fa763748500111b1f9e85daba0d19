@@ -1,0 +1,133 @@
+package com.habittracker.Habittracker.serviceimpl;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.habittracker.Habittracker.DTO.AddHabitRequest;
+import com.habittracker.Habittracker.DTO.UpdateHabitRequest;
+import com.habittracker.Habittracker.entity.Habit;
+import com.habittracker.Habittracker.repository.HabitRepository;
+import com.habittracker.Habittracker.service.HabitService;
+
+@Service
+public class HabitServiceImpl implements HabitService {
+
+    @Autowired
+    private HabitRepository habitRepository;
+
+    @Override
+    public String addHabit(AddHabitRequest request, String email) {
+
+        Habit habit = new Habit();
+
+        habit.setHabitName(request.getHabitName());
+        habit.setCategory(request.getCategory());
+        habit.setFrequency(request.getFrequency());
+        habit.setIcon(request.getIcon());
+        habit.setColor(request.getColor());
+
+        habit.setCompleted(false);
+        habit.setStreak(0);
+        habit.setLastCompletedDate(null);
+
+        habitRepository.save(habit);
+
+        return "Habit Added Successfully!";
+    }
+
+    @Override
+    public List<Habit> getAllHabits(String email) {
+
+        LocalDate today = LocalDate.now();
+
+        List<Habit> habits = habitRepository.findAll();
+
+        for (Habit habit : habits) {
+
+            // If it wasn't completed today, reset the button
+            if (habit.getLastCompletedDate() == null ||
+                !habit.getLastCompletedDate().equals(today)) {
+
+                habit.setCompleted(false);
+                habitRepository.save(habit);
+            }
+        }
+
+        return habitRepository.findAll();
+    }
+
+    @Override
+    public String updateHabit(Long id, UpdateHabitRequest request) {
+
+        Optional<Habit> optionalHabit = habitRepository.findById(id);
+
+        if (optionalHabit.isEmpty()) {
+            return "Habit Not Found!";
+        }
+
+        Habit habit = optionalHabit.get();
+
+        habit.setHabitName(request.getHabitName());
+        habit.setCategory(request.getCategory());
+        habit.setFrequency(request.getFrequency());
+
+        habitRepository.save(habit);
+
+        return "Habit Updated Successfully!";
+    }
+
+    @Override
+    public String deleteHabit(Long id) {
+
+        if (!habitRepository.existsById(id)) {
+            return "Habit Not Found!";
+        }
+
+        habitRepository.deleteById(id);
+
+        return "Habit Deleted Successfully!";
+    }
+
+    @Override
+    public String completeHabit(Long id) {
+
+        Optional<Habit> optionalHabit = habitRepository.findById(id);
+
+        if (optionalHabit.isEmpty()) {
+            return "Habit Not Found!";
+        }
+
+        Habit habit = optionalHabit.get();
+
+        LocalDate today = LocalDate.now();
+
+        // Prevent multiple completions on the same day
+        if (today.equals(habit.getLastCompletedDate())) {
+            return "Habit already completed today!";
+        }
+
+        // Increase streak if yesterday was completed
+        if (habit.getLastCompletedDate() != null &&
+            habit.getLastCompletedDate().equals(today.minusDays(1))) {
+
+            habit.setStreak(habit.getStreak() + 1);
+
+        } else {
+
+            // Start a new streak
+            habit.setStreak(1);
+        }
+
+        habit.setLastCompletedDate(today);
+        habit.setCompleted(true);
+
+        habitRepository.save(habit);
+
+        return "Habit Completed Successfully!";
+    }
+
+}

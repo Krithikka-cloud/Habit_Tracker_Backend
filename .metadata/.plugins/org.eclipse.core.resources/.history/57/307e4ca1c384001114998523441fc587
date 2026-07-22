@@ -1,0 +1,51 @@
+package com.habittracker.Habittracker.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.habittracker.Habittracker.DTO.AddHabitRequest;
+import com.habittracker.Habittracker.DTO.UpdateHabitRequest;
+import com.habittracker.Habittracker.entity.Habit;
+import com.habittracker.Habittracker.service.HabitService;
+
+@CrossOrigin(origins = "http://127.0.0.1:5500")
+@RestController
+@RequestMapping("/habit")
+public class HabitController {
+
+    @Autowired
+    private HabitService habitService;
+
+    @PostMapping("/add")
+    public String addHabit(@RequestBody AddHabitRequest request) {
+        return habitService.addHabit(request);
+    }
+    
+    @GetMapping("/all")
+    public List<Habit> getAllHabits() {
+        return habitService.getAllHabits();
+    }
+    
+    @PutMapping("/update/{id}")
+    public String updateHabit(@PathVariable Long id,
+                              @RequestBody UpdateHabitRequest request) {
+
+        return habitService.updateHabit(id, request);
+    }
+    
+    @DeleteMapping("/delete/{id}")
+    public String deleteHabit(@PathVariable Long id) {
+
+        return habitService.deleteHabit(id);
+
+    }
+    
+    @PutMapping("/complete/{id}")
+    public String completeHabit(@PathVariable Long id) {
+
+        return habitService.completeHabit(id);
+
+    }
+}

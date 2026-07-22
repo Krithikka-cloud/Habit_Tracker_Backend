@@ -1,0 +1,20 @@
+package com.habittracker.Habittracker.service;
+
+import com.habittracker.Habittracker.DTO.ChangePasswordRequest;
+import com.habittracker.Habittracker.DTO.LoginRequest;
+import com.habittracker.Habittracker.DTO.RegisterRequest;
+import com.habittracker.Habittracker.DTO.UpdateProfileRequest;
+
+public interface UserService {
+
+    String register(RegisterRequest request);
+
+    String login(LoginRequest request);
+
+    String updateProfile(UpdateProfileRequest request);
+
+    String changePassword(ChangePasswordRequest request);
+
+    String deleteAccount(String email);
+
+}

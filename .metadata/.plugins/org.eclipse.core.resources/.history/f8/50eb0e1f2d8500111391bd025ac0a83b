@@ -1,0 +1,23 @@
+package com.habittracker.Habittracker.repository;
+import java.util.Optional;
+
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.habittracker.Habittracker.entity.User;
+
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    // Check whether an email already exists
+    boolean existsByEmail(String email);
+
+    // Find a user by email
+    Optional<User> findByEmail(String email);
+    
+   
+
+}
+
