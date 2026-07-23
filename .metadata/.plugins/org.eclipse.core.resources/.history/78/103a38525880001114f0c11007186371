@@ -1,5 +1,0 @@
-package com.habittracker.Habittracker.security;
-
-public class wtAuthenticationFilter {
-
-}
