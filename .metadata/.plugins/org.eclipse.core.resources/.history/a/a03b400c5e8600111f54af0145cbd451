@@ -1,0 +1,47 @@
+package com.habittracker.Habittracker.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.habittracker.Habittracker.DTO.LoginRequest;
+import com.habittracker.Habittracker.DTO.RegisterRequest;
+import com.habittracker.Habittracker.service.UserService;
+
+@CrossOrigin(origins = {
+	    "https://krithikka-cloud.github.io",
+	    "http://127.0.0.1:5500",
+	    "http://localhost:5500"
+	})
+@RestController
+@RequestMapping("/auth")
+public class AuthController {
+
+    @Autowired
+    private UserService userService;
+
+    @PostMapping("/register")
+    public String register(@RequestBody RegisterRequest request) {
+
+        return userService.register(request);
+
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+
+        String result = userService.login(request);
+
+        if(result.equals("Invalid Email or Password!")) {
+
+            return ResponseEntity
+                    .status(401)
+                    .body(result);
+        }
+
+        return ResponseEntity.ok(result);
+
+    }
+    
+
+}
