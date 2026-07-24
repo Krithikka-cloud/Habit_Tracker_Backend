@@ -3,6 +3,7 @@
 	<item key="hasShownOverlayPopupBefore" value="true"/>
 	<section name="java.lang.Class">
 		<list key="findhistory">
+			<item value="http.add"/>
 			<item value="private String addHabi"/>
 			<item value="private UserRe"/>
 		</list>
